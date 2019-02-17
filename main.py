@@ -2,35 +2,44 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-# def match_field( field, prop, attr ):
-#     result = []
-#     match =  soup.find_all(field, {prop:attr}, text=True)
+def match_field( field, prop, attr, bs4handler ):
+    result = []
+    match =  bs4handler.find_all(field, {prop:attr}, text=True)
 
-#     for i in match[0:-3]:
-#         result.append(i.string.strip())
-#     return result
+    for i in match[0:-3]:
+        result.append(i.string.strip())
+    return result
 
 def build_url(borough, spec ):
 
     base_url = 'https://www.doctoralia.com.br/local/' + borough.replace(' ', '-') + '-rio-de-janeiro-rj/' + spec
     return base_url, base_url + '/2'
+    
+def scrape(url):
 
-# names = match_field('span', 'itemprop', 'name')
-# addr = match_field('span', 'class', 'street')
-# espec = match_field('h4', 'class', 'h3 text-muted text-base-size text-base-weight offset-xs-bottom-0 offset-sm-bottom-0')
+    htm_params = [
+                    ['span', 'itemprop', 'name'],
+                    ['span', 'class', 'street'],
+                    ['h4', 'class', 'h3 text-muted text-base-size text-base-weight offset-xs-bottom-0 offset-sm-bottom-0']
+                 ]
 
-# result = []
-# for i in espec:
-#     aux = i.replace('\n', ' ')
-#     result.append((aux.replace('\t', '')))
-# print(result)
-
-def scrape( url_list ):
-
-    for url in url_list:
+    try:
         source = requests.get(url).text
-
         soup = BeautifulSoup( source, 'lxml')
+
+        columns = []
+        for param in htm_params: 
+            if param[0] == 'h4':
+                aux = []
+                for string in match_field(*param, soup):
+                    aux.append(string.replace('\n', ' ').replace('\t', ''))
+                columns.append(aux)
+            else:
+                columns.append(match_field(*param, soup))
+        return columns
+    except:
+        print("Exception raised")
+        pass
 
 
 if __name__ == "__main__":
@@ -67,9 +76,16 @@ if __name__ == "__main__":
             urls.append(first_page)
             urls.append(scnd_page)
 
+    counter = 1 
+    for url in urls:
+        
+        print(url)
+        result = scrape(url)
+        data = zip(*result)
+        print(f"------------------------ couter = {counter} of  {len(urls)}")
+        counter = counter + 1
 
-    # data_pointer = zip(names, result, addr)
+        for row in data:
+            csv_writer.writerows(data)
 
-    # csv_writer.writerows(data_pointer)
     csv_output.close()
-
