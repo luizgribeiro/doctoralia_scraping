@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     csv_output = open('info.csv', 'w')
     csv_writer = csv.writer(csv_output, delimiter=';')
-    csv_writer.writerow(['Nome', 'Especialidade', 'Endereco'])
+    csv_writer.writerow(['Nome', 'Endereco', 'Especialidade'])
 
 
     boroughs = ['recreio dos bandeirantes', 
