@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
 
 def match_field( field, prop, attr, bs4handler ):
     result = []
@@ -14,7 +15,7 @@ def build_url(borough, spec ):
 
     base_url = 'https://www.doctoralia.com.br/local/' + borough.replace(' ', '-') + '-rio-de-janeiro-rj/' + spec
     return base_url, base_url + '/2'
-    
+
 def scrape(url):
 
     htm_params = [
@@ -58,7 +59,9 @@ if __name__ == "__main__":
                 'vargem grande',
                 'vargem pequena',
                 'curicica',
-                'taquara'
+                'taquara',
+                'campo grande',
+                'freguesia'
                ]
 
     spec = ['pediatra',
@@ -66,7 +69,8 @@ if __name__ == "__main__":
             'endocrinologista',
             'dentista',
             'fisioterapeuta',
-            'pneumologista'
+            'pneumologista',
+            'otorrino'
            ]
 
     urls = []
