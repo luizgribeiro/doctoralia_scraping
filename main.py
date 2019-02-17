@@ -10,8 +10,10 @@ import csv
 #         result.append(i.string.strip())
 #     return result
 
-build_url = lambda borough, spec: 'https://www.doctoralia.com.br/local/' + borough.replace(' ', '-') + '-rio-de-janeiro-rj/' + spec
+def build_url(borough, spec ):
 
+    base_url = 'https://www.doctoralia.com.br/local/' + borough.replace(' ', '-') + '-rio-de-janeiro-rj/' + spec
+    return base_url, base_url + '/2'
 
 # names = match_field('span', 'itemprop', 'name')
 # addr = match_field('span', 'class', 'street')
@@ -31,7 +33,6 @@ def scrape( url_list ):
         soup = BeautifulSoup( source, 'lxml')
 
 
-
 if __name__ == "__main__":
 
 
@@ -40,13 +41,35 @@ if __name__ == "__main__":
     csv_writer.writerow(['Nome', 'Especialidade', 'Endereco'])
 
 
-    boroughs = ['recreio dos bandeirantes', 'barra da tijuca']
-    for i in boroughs:
-        print(build_url(i, 'ped'))
+    boroughs = ['recreio dos bandeirantes', 
+                'barra da tijuca',
+                'campo grande',
+                'pedra de guaratiba',
+                'ilha de guaratiba',
+                'vargem grande',
+                'vargem pequena',
+                'curicica',
+                'taquara'
+               ]
+
+    spec = ['pediatra',
+            'cardiologista',
+            'endocrinologista',
+            'dentista',
+            'fisioterapeuta',
+            'pneumologista'
+           ]
+
+    urls = []
+    for b in boroughs:
+        for s in spec:
+            first_page, scnd_page = build_url(b, s)
+            urls.append(first_page)
+            urls.append(scnd_page)
 
 
     # data_pointer = zip(names, result, addr)
 
     # csv_writer.writerows(data_pointer)
-        csv_output.close()
+    csv_output.close()
 
