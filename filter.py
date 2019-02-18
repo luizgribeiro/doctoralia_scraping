@@ -1,10 +1,6 @@
-import pandas as pd
+from more_itertools import unique_everseen
 
-
-df = pd.read_csv('info.csv', sep=';')
-
-df.drop_duplicates()
-
-df.to_csv('docs_info.csv', sep=';')
+with open('info.csv', 'r') as in_file, open('docs_info.csv', 'w') as out_file:
+     out_file.writelines(unique_everseen(in_file))
 
 

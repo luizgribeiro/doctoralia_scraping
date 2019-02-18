@@ -67,7 +67,6 @@ if __name__ == "__main__":
     spec = ['pediatra',
             'cardiologista',
             'endocrinologista',
-            'dentista',
             'fisioterapeuta',
             'pneumologista',
             'otorrino'
